@@ -1,7 +1,7 @@
 /**
  * scripts/deploy.js
  *
- * Deploys OrderFlowRegistry smart contract directly to BOT Chain (Bohr Testnet).
+ * Compiles and deploys OrderFlowRegistry to BOT Chain (Bohr Testnet).
  * Network: Bohr Testnet (Chain ID 968)
  * RPC: https://rpc.bohr.life
  * Explorer: https://scan.bohr.life/
@@ -9,64 +9,15 @@
 
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
-
-// ─── Network Configuration ────────────────────────────────────────────────────
+const solc = require('solc');
+const { ethers } = require('ethers');
 
 const NETWORK = {
   name: 'BOT Chain (Bohr Testnet)',
   chainId: 968,
   rpcUrl: 'https://rpc.bohr.life',
   explorerUrl: 'https://scan.bohr.life',
-  faucetUrl: 'https://faucet.botchain.ai/basic',
 };
-
-// ─── Minimal RPC Client ───────────────────────────────────────────────────────
-
-function rpcRequest(method, params = []) {
-  return new Promise((resolve, reject) => {
-    const url = new URL(NETWORK.rpcUrl);
-    const body = JSON.stringify({
-      jsonrpc: '2.0',
-      id: Date.now(),
-      method,
-      params,
-    });
-
-    const req = https.request(
-      url,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(body),
-        },
-      },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => (data += chunk));
-        res.on('end', () => {
-          try {
-            const json = JSON.parse(data);
-            if (json.error) {
-              reject(new Error(json.error.message || JSON.stringify(json.error)));
-            } else {
-              resolve(json.result);
-            }
-          } catch (e) {
-            reject(new Error(`Invalid JSON response: ${data}`));
-          }
-        });
-      }
-    );
-
-    req.on('error', reject);
-    req.write(body);
-    req.end();
-  });
-}
-
-// ─── Load Deployer Key from secrets.txt ────────────────────────────────────────
 
 function loadCredentials() {
   const secretsPath = path.join(__dirname, '..', 'secrets.txt');
@@ -84,93 +35,120 @@ function loadCredentials() {
   return { privateKey, address };
 }
 
-// ─── Main Deployment Routine ──────────────────────────────────────────────────
+function compileContract() {
+  console.log('[1/4] Compiling OrderFlowRegistry.sol with solc...');
+  const contractPath = path.join(__dirname, '..', 'contracts', 'OrderFlowRegistry.sol');
+  const source = fs.readFileSync(contractPath, 'utf8');
+
+  const input = {
+    language: 'Solidity',
+    sources: {
+      'OrderFlowRegistry.sol': {
+        content: source,
+      },
+    },
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+      outputSelection: {
+        '*': {
+          '*': ['abi', 'evm.bytecode'],
+        },
+      },
+    },
+  };
+
+  const output = JSON.parse(solc.compile(JSON.stringify(input)));
+
+  if (output.errors) {
+    const hasError = output.errors.some((err) => err.severity === 'error');
+    output.errors.forEach((err) => {
+      if (err.severity === 'error') console.error('Compile Error:', err.formattedMessage);
+      else console.warn('Compile Warning:', err.formattedMessage);
+    });
+    if (hasError) throw new Error('Solidity compilation failed.');
+  }
+
+  const contract = output.contracts['OrderFlowRegistry.sol']['OrderFlowRegistry'];
+  const abi = contract.abi;
+  const bytecode = contract.evm.bytecode.object;
+
+  console.log('[✓] Contract compiled successfully. Bytecode size:', bytecode.length / 2, 'bytes');
+  return { abi, bytecode };
+}
 
 async function main() {
   console.log('========================================================');
   console.log(`     DEPLOYING ORDERFLOW REGISTRY TO ${NETWORK.name}    `);
   console.log('========================================================\n');
 
-  // 1. Verify RPC connectivity
-  try {
-    const blockNumberHex = await rpcRequest('eth_blockNumber');
-    const blockNumber = parseInt(blockNumberHex, 16);
-    console.log(`[✓] Connected to BOT Chain RPC: ${NETWORK.rpcUrl}`);
-    console.log(`[✓] Current Block Number: ${blockNumber}`);
-  } catch (err) {
-    console.error(`[✗] Failed to connect to BOT Chain RPC:`, err.message);
-    process.exit(1);
-  }
+  const { abi, bytecode } = compileContract();
 
-  // 2. Load credentials
   const creds = loadCredentials();
-  let privateKey = process.env.BOTCHAIN_DEPLOYER_PRIVATE_KEY || creds.privateKey;
-  let address = process.env.BOTCHAIN_DEPLOYER_ADDRESS || creds.address;
+  const privateKey = process.env.BOTCHAIN_DEPLOYER_PRIVATE_KEY || creds.privateKey;
+  if (!privateKey) throw new Error('No BOTCHAIN_DEPLOYER_PRIVATE_KEY found.');
 
-  if (!privateKey) {
-    console.log('[!] No deployer private key found in secrets.txt.');
-    console.log('[i] Running wallet generator...\n');
-    const { generateWallet } = require('./generate-wallet');
-    const wallet = generateWallet();
-    console.log(`Please claim free testnet tokens from: ${NETWORK.faucetUrl}`);
-    console.log(`Then run: npm run deploy:testnet\n`);
-    return;
+  console.log('[2/4] Connecting to BOT Chain RPC...');
+  const provider = new ethers.JsonRpcProvider(NETWORK.rpcUrl, {
+    chainId: NETWORK.chainId,
+    name: 'bohr-testnet',
+  });
+
+  const wallet = new ethers.Wallet(privateKey, provider);
+  console.log('[✓] Deployer Address:', wallet.address);
+
+  const balance = await provider.getBalance(wallet.address);
+  console.log(`[✓] Deployer Balance: ${ethers.formatEther(balance)} BOT`);
+
+  if (balance === 0n) {
+    throw new Error('Insufficient balance to deploy.');
   }
 
-  // 3. Resolve wallet address
-  let ethers;
-  try {
-    ethers = require('ethers').ethers || require('ethers');
-    const wallet = new ethers.Wallet(privateKey);
-    address = wallet.address;
-  } catch {
-    console.log('Resolving address...');
-  }
+  console.log('\n[3/4] Broadcasting deployment transaction...');
+  const factory = new ethers.ContractFactory(abi, bytecode, wallet);
+  const contract = await factory.deploy();
 
-  console.log(`Deployer Address: ${address || 'Configured in secrets.txt'}`);
+  console.log('[i] Transaction Hash:', contract.deploymentTransaction().hash);
+  console.log('[i] Waiting for transaction confirmation on Bohr Testnet (~0.75s blocks)...');
 
-  // 4. Check balance
-  if (address) {
-    const balanceHex = await rpcRequest('eth_getBalance', [address, 'latest']);
-    const balanceWei = BigInt(balanceHex);
-    const balanceBOT = Number(balanceWei) / 1e18;
+  await contract.waitForDeployment();
+  const contractAddress = await contract.getAddress();
 
-    console.log(`Account Balance:  ${balanceBOT.toFixed(4)} BOT`);
-
-    if (balanceWei === 0n) {
-      console.log('\n--------------------------------------------------------');
-      console.log('⚠️  INSUFFICIENT BALANCE FOR DEPLOYMENT GAS');
-      console.log(`1. Go to BOT Chain Faucet: ${NETWORK.faucetUrl}`);
-      console.log(`2. Paste your address:    ${address}`);
-      console.log(`3. Click "Claim" to receive test tBOT.`);
-      console.log(`4. Re-run this deployment script once funded.`);
-      console.log('--------------------------------------------------------\n');
-      return;
-    }
-  }
-
-  // 5. Deploy with ethers
-  if (ethers) {
-    console.log('\n[i] Compiling and broadcasting contract to Bohr Testnet...');
-    const provider = new ethers.JsonRpcProvider(NETWORK.rpcUrl);
-    const signer = new ethers.Wallet(privateKey, provider);
-
-    // Simple OrderFlowRegistry Factory
-    const contractSource = fs.readFileSync(path.join(__dirname, '..', 'contracts', 'OrderFlowRegistry.sol'), 'utf8');
-
-    console.log('[✓] Signer ready on Bohr Testnet (Chain ID 968)');
-    console.log(`[i] Initiating deployment transaction...`);
-
-    // In Next.js/Node environment, we output transaction guidance
-    console.log(`\nReady to broadcast transaction via ethers.Wallet.`);
-  }
-
-  console.log('\n========================================================');
-  console.log('Deployment script initialized. Ready for testnet broadcast.');
+  console.log('\n[4/4] ========================================================');
+  console.log('🎉 CONTRACT DEPLOYED SUCCESSFULLY TO BOHR TESTNET!');
   console.log('========================================================');
+  console.log('Contract Name:    OrderFlowRegistry');
+  console.log('Contract Address:', contractAddress);
+  console.log('Transaction Hash:', contract.deploymentTransaction().hash);
+  console.log('BOTScan Explorer:', `${NETWORK.explorerUrl}/address/${contractAddress}`);
+  console.log('========================================================\n');
+
+  // Save address into secrets.txt and artifacts
+  const secretsPath = path.join(__dirname, '..', 'secrets.txt');
+  if (fs.existsSync(secretsPath)) {
+    let secretsContent = fs.readFileSync(secretsPath, 'utf8');
+    secretsContent = secretsContent.replace(
+      /NEXT_PUBLIC_ORDERFLOW_REGISTRY_ADDRESS=.*/,
+      `NEXT_PUBLIC_ORDERFLOW_REGISTRY_ADDRESS=${contractAddress}`
+    );
+    fs.writeFileSync(secretsPath, secretsContent, 'utf8');
+    console.log('[✓] Updated secrets.txt with deployed contract address.');
+  }
+
+  // Also save ABI and address to src/lib/OrderFlowRegistry.json for frontend
+  const artifactDir = path.join(__dirname, '..', 'src', 'lib', 'contracts');
+  if (!fs.existsSync(artifactDir)) fs.mkdirSync(artifactDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(artifactDir, 'OrderFlowRegistry.json'),
+    JSON.stringify({ address: contractAddress, abi, chainId: NETWORK.chainId }, null, 2),
+    'utf8'
+  );
+  console.log('[✓] Exported ABI and address to src/lib/contracts/OrderFlowRegistry.json');
 }
 
 main().catch((err) => {
-  console.error('[Deploy Error]:', err);
+  console.error('\n[Deployment Failed]:', err);
   process.exit(1);
 });

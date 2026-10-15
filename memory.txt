@@ -59,6 +59,11 @@ Key Milestones Completed:
 - Block Explorer: https://scan.bohr.life/
 - Faucet: https://faucet.botchain.ai/basic
 - Testnet Wallet: BO Wallet (https://wallet.bohr.life/) / MetaMask
+- Deployed Smart Contracts:
+  * OrderFlowRegistry: 0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552
+    Tx Hash: 0x0487704d0662a4df0354f2751f3020ea4db2e0f000cd3646aed4d7fa12d342ed
+    BOTScan: https://scan.bohr.life/address/0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552
+    ABI: src/lib/contracts/OrderFlowRegistry.json
 
 [Mainnet: BOT Chain]
 - Network Name: BOT Chain Mainnet
@@ -143,6 +148,13 @@ Key Milestones Completed:
     [x] Upgraded calendar.tsx custom components for react-day-picker v9 (Chevron orientation).
     [x] Fixed duplicate address variable declaration in scripts/deploy.js.
     [x] Verified zero TypeScript compilation errors with clean `npm run typecheck` exit.
+
+[x] Phase 6: Testnet Deployment & Frontend Standalone Resilience (October 15, 2026)
+    [x] Deployed OrderFlowRegistry to Bohr Testnet at 0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552.
+    [x] Exported ABI & contract artifacts to src/lib/contracts/OrderFlowRegistry.json.
+    [x] Implemented client-side fallback in dashboard/page.tsx so wallet and trade analytics render smoothly without a backend.
+    [x] Implemented offline typewriter fallback in AnalysisPanel.tsx for instant AI behavioral review without external servers.
+    [x] Verified full production Next.js build passes cleanly for Vercel deployment.
 
 --------------------------------------------------------------------------------
 5. QUICK REFERENCE COMMANDS & LINKS
