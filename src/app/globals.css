@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 25% 4%;
+    --foreground: 0 0% 100%;
+    --card: 240 17% 9%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 17% 9%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 189 100% 50%;
+    --primary-foreground: 240 25% 4%;
+    --secondary: 239 84% 67%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 10% 60%;
+    --muted-foreground: 240 10% 60%;
+    --accent: 189 100% 50%;
+    --accent-foreground: 240 25% 4%;
+    --destructive: 0 100% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 189 100% 50% / 0.15;
+    --input: 189 100% 50% / 0.15;
+    --ring: 189 100% 50%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline tracking-tight;
+  }
+}
+
+.font-mono-data {
+  font-family: 'Source Code Pro', monospace;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 12px rgba(0, 212, 255, 0.6); }
+  50% { box-shadow: 0 0 28px rgba(0, 212, 255, 0.95); }
+  100% { box-shadow: 0 0 12px rgba(0, 212, 255, 0.6); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+.analysis-content h2 {
+  color: #00D4FF;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.analysis-content p {
+  @apply mb-4 leading-relaxed;
+}
+
+.insight-card {
+  @apply bg-[#13131A] border border-[rgba(0,212,255,0.2)] shadow-[0_2px_20px_rgba(0,212,255,0.08)];
+}

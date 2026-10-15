@@ -1,0 +1,160 @@
+================================================================================
+           BOT CHAIN MIGRATION - PROJECT MEMORY & PROGRESS LOG
+================================================================================
+Project: OrderFlow (AI Behavioral Trading Journal & On-Chain Analytics)
+Target Ecosystem: BOT Chain (EVM Layer 1 for DePIN and AI Applications)
+Reference Docs: https://dev-docs.botchain.ai/docs/intro
+Last Updated: October 15, 2026
+Status: Migration to BOT Chain Completed & Typecheck Validated
+
+--------------------------------------------------------------------------------
+1. EXECUTIVE SUMMARY & WHAT WAS ACCOMPLISHED
+--------------------------------------------------------------------------------
+The entire OrderFlow codebase has been migrated from Injective to BOT Chain.
+
+Key Milestones Completed:
+1. Native BOT Chain RPC & Ingestion Engine (src/lib/botchain.ts):
+   - Created full network definitions for Bohr Testnet (Chain ID 968) and
+     BOT Chain Mainnet (Chain ID 677).
+   - Built zero-dependency EVM JSON-RPC client for eth_blockNumber, eth_getBalance,
+     eth_getTransactionCount, and eth_getLogs.
+   - Built B DEX swap parser (Uniswap V2 / B DEX Pair event topic 0xd78ad...)
+     and deterministic wallet seed generator for new accounts.
+   - Replaced @injectivelabs/* packages with native EVM architecture.
+
+2. EVM Wallet & Network Switching (src/hooks/use-wallet.ts & src/components/WalletModal.tsx):
+   - Added support for MetaMask and BO Wallet (official BOT Chain wallet).
+   - Automated network addition & switching via wallet_addEthereumChain /
+     wallet_switchEthereumChain for Bohr Testnet (0x3c8) and BOT Mainnet (0x2a5).
+   - Added network toggle pill in Navigation component.
+   - Added direct faucet access link (https://faucet.botchain.ai/basic).
+
+3. Trading Data & Normalization (src/lib/mock-data.ts & src/lib/normalize.ts):
+   - Updated mock pairs to BOT Chain ecosystem: BOT/USDT, BOT/ETH, AI/BOT,
+     DEPIN/BOT, BOT/USDC, BTC/USDT-PERP.
+   - Updated MOCK_ANALYSIS narrative for BOT Chain block times (0.75s) and fee dynamics ($0.06).
+   - Pointed TradeTable verification links directly to BOTScan (scan.bohr.life / scan.botchain.ai).
+
+4. API Routes (src/app/api/fetch-trades/route.ts & src/app/api/save-report/route.ts):
+   - Migrated from Injective bech32 address conversions to native EVM 0x... validation.
+   - Integrated BOT Chain RPC querying with Supabase caching & graceful offline fallback.
+
+5. AI Behavioral Coach Engine (src/ai/flows/analyze-trading-behavior-flow.ts):
+   - Updated system prompts for BOT Chain DEX, AI & DePIN market dynamics.
+
+6. UI & Branding Overhaul:
+   - Added BOT Chain feature badge to Landing Page hero.
+   - Updated dashboard status monitors, network pills, and copy.
+   - Updated report page Open Graph Twitter tags with #BOTChain #DePIN #AI.
+
+--------------------------------------------------------------------------------
+2. BOT CHAIN TECHNICAL SPECIFICATIONS
+--------------------------------------------------------------------------------
+[Testnet: Bohr Testnet]
+- Network Name: BOT Chain (Bohr Testnet)
+- Chain ID: 968 (Hex: 0x3c8)
+- Currency Symbol: BOT
+- Decimals: 18
+- RPC Endpoint: https://rpc.bohr.life
+- Block Explorer: https://scan.bohr.life/
+- Faucet: https://faucet.botchain.ai/basic
+- Testnet Wallet: BO Wallet (https://wallet.bohr.life/) / MetaMask
+
+[Mainnet: BOT Chain]
+- Network Name: BOT Chain Mainnet
+- Chain ID: 677 (Hex: 0x2a5)
+- Currency Symbol: BOT
+- Decimals: 18
+- Total Supply: 150 Million BOT
+- RPC Endpoint: https://rpc.botchain.ai
+- Block Explorer: https://scan.botchain.ai
+- Official DEX: https://dex.botchain.ai/#/swap (B DEX)
+- Official Bridge: https://bridge.botchain.ai/
+- Official Wallet: https://wallet.botchain.ai/ / MetaMask
+
+--------------------------------------------------------------------------------
+3. REPOSITORY FILE STRUCTURE OVERVIEW
+--------------------------------------------------------------------------------
+/
+├── src/
+│   ├── ai/
+│   │   ├── flows/
+│   │   │   └── analyze-trading-behavior-flow.ts (Gemini prompt for BOT Chain)
+│   │   ├── dev.ts
+│   │   └── genkit.ts
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── analyze/route.ts (SSE real-time streaming)
+│   │   │   ├── fetch-trades/route.ts (BOT Chain RPC trade ingestion)
+│   │   │   └── save-report/route.ts (Database report storage)
+│   │   ├── dashboard/page.tsx (Main trading dashboard with BOT Chain status)
+│   │   ├── report/[id]/page.tsx (Public shareable report with BOT Chain OG tags)
+│   │   ├── layout.tsx
+│   │   └── page.tsx (Landing page with BOT Chain 0.75s block feature badge)
+│   ├── components/
+│   │   ├── AnalysisPanel.tsx (AI typewriter streaming panel with X share)
+│   │   ├── Navigation.tsx (Nav bar with BOT Chain network toggle pill)
+│   │   ├── StatsStrip.tsx (5 behavioral metrics cards)
+│   │   ├── TradeTable.tsx (Trade execution table with BOTScan verification)
+│   │   └── WalletModal.tsx (MetaMask & BO Wallet connection with faucet link)
+│   ├── hooks/
+│   │   └── use-wallet.ts (EVM connection, network switching, accounts listener)
+│   └── lib/
+│       ├── botchain.ts (BOT Chain RPC client, B DEX parser, explorer links)
+│       ├── injective.ts (Compatibility shim)
+│       ├── mock-data.ts (BOT Chain simulated dataset & coach analysis)
+│       └── normalize.ts (Behavioral metrics engine)
+├── secrets.txt (Protected environment and credentials template)
+├── memory.txt (This file)
+├── README.md (Comprehensive documentation for BOT Chain)
+└── package.json (Cleaned EVM dependencies)
+
+--------------------------------------------------------------------------------
+4. MIGRATION ROADMAP & STATUS
+--------------------------------------------------------------------------------
+[x] Phase 0: Project Setup & Safety
+    [x] Create secrets.txt (credential and environment variable templates)
+    [x] Protect secrets.txt in .gitignore
+    [x] Create memory.txt (project memory, specs, progress tracking)
+
+[x] Phase 1: EVM Wallet & BOT Chain Network Configuration
+    [x] Replaced Injective Keplr/Cosmos wallet with standard EVM wallet (MetaMask & BO Wallet).
+    [x] Implemented automated network addition & switching for Bohr Testnet (968) and Mainnet (677).
+    [x] Built network toggle indicator in Navigation component.
+
+[x] Phase 2: BOT Chain Trading & Swap Data Engine
+    [x] Implemented BOT Chain JSON-RPC client (eth_getLogs, eth_blockNumber, eth_getBalance).
+    [x] Created B DEX swap event decoder.
+    [x] Updated mock-data.ts to reflect BOT Chain ecosystem pairs (BOT/USDT, BOT/ETH, AI/BOT, DEPIN/BOT).
+    [x] Updated TradeTable verification links to scan.bohr.life and scan.botchain.ai.
+
+[x] Phase 3: AI Behavioral Trading Coach Tuning
+    [x] Updated Gemini Genkit prompt for BOT Chain trading dynamics (sub-second blocks, $0.06 fees).
+    [x] Tested SSE typewriter streaming.
+
+[x] Phase 4: UI, Branding & Verification Links
+    [x] Updated branding and network badges across landing page, dashboard, and report pages.
+    [x] Updated Twitter/X social share templates for #BOTChain #DePIN #AI.
+    [x] Cleaned package.json of unused @injectivelabs dependencies.
+
+[x] Phase 5: TypeScript & Compilation Stabilization (October 15, 2026)
+    [x] Fixed StatsStrip.tsx volume calculation to use Trade.size.
+    [x] Fixed resolveMarketTicker in botchain.ts to support optional allMarkets parameter.
+    [x] Upgraded calendar.tsx custom components for react-day-picker v9 (Chevron orientation).
+    [x] Fixed duplicate address variable declaration in scripts/deploy.js.
+    [x] Verified zero TypeScript compilation errors with clean `npm run typecheck` exit.
+
+--------------------------------------------------------------------------------
+5. QUICK REFERENCE COMMANDS & LINKS
+--------------------------------------------------------------------------------
+- Install dependencies: npm install
+- Start local dev server: npm run dev
+- Typecheck: npm run typecheck
+- Bohr Testnet Faucet: https://faucet.botchain.ai/basic
+- Bohr Testnet Explorer: https://scan.bohr.life/
+- BOT Chain Mainnet Explorer: https://scan.botchain.ai/
+- B DEX Swap: https://dex.botchain.ai/#/swap
+
+================================================================================
+                          END OF PROJECT MEMORY
+================================================================================
