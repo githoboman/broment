@@ -13,12 +13,17 @@ import { createClient } from '@supabase/supabase-js';
 import { Navigation } from '@/components/Navigation';
 import { MOCK_ANALYSIS } from '@/lib/mock-data';
 
-// ─── Supabase (server-side) ───────────────────────────────────────────────────
+// ─── Dynamic route configuration for Next.js ──────────────────────────────────
+export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// ─── Supabase (server-side, safely resolved) ───────────────────────────────────
+
+function getSupabase() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseKey) return null;
+  return createClient(supabaseUrl, supabaseKey);
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -38,16 +43,19 @@ async function getReport(id: string): Promise<ReportData | null> {
   if (id === 'demo') {
     return {
       id: 'demo',
-      walletAddress: 'inj1a8cd...f9x2',
+      walletAddress: '0x71C8A6d2A7b282AC0C821d3f8205f0a07153Db08',
       analysisText: MOCK_ANALYSIS,
       tradeCount: 200,
-      markets: ['INJ/USDT', 'BTC/USDT-PERP', 'ETH/USDT', 'ATOM/USDT', 'SOL/USDT', 'TIA/USDT'],
+      markets: ['BOT/USDT', 'BOT/ETH', 'AI/BOT', 'DEPIN/BOT', 'BOT/USDC', 'BTC/USDT-PERP'],
       createdAt: new Date().toISOString(),
     };
   }
 
   // Real report from Supabase
   try {
+    const supabase = getSupabase();
+    if (!supabase) return null;
+
     const { data, error } = await supabase
       .from('reports')
       .select(`
@@ -87,8 +95,9 @@ async function getReport(id: string): Promise<ReportData | null> {
 // ─── Metadata (Open Graph for Twitter card) ───────────────────────────────────
 
 export async function generateMetadata(
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
+  const params = await props.params;
   const report = await getReport(params.id);
   const tradeCount = report?.tradeCount ?? 0;
 
@@ -144,7 +153,10 @@ function renderAnalysis(text: string) {
 
 // ─── Page component ───────────────────────────────────────────────────────────
 
-export default async function ReportPage({ params }: { params: { id: string } }) {
+export default async function ReportPage(
+  props: { params: Promise<{ id: string }> }
+) {
+  const params = await props.params;
   const report = await getReport(params.id);
 
   if (!report) notFound();
