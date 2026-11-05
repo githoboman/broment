@@ -4,8 +4,8 @@
 **Version 1.0 — October 2026**  
 **Ecosystem:** BOT Chain (EVM Layer 1 for DePIN and AI Applications)  
 **Smart Contract Deployments:**
+- **BOT Chain Mainnet (Chain ID 677):** `0x28d3EE0C8242eE27907bc068B25f54da00A729Ad`
 - **Bohr Testnet (Chain ID 968):** `0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552`
-- **BOT Chain Mainnet (Chain ID 677):** Pending Deployer Broadcast (`scripts/deploy.js --network mainnet`)
 **Official Repository:** [https://github.com/githoboman/broment](https://github.com/githoboman/broment)  
 **Live DApp:** [https://orderflow-hq.vercel.app](https://orderflow-hq.vercel.app)
 
@@ -147,8 +147,9 @@ The `OrderFlowRegistry` smart contract acts as the verifiable truth layer on BOT
 | **Chain ID** | `968` (`0x3c8`) | `677` (`0x2a5`) |
 | **RPC Endpoint** | `https://rpc.bohr.life` | `https://rpc.botchain.ai` |
 | **Block Explorer** | [BOTScan Testnet](https://scan.bohr.life/) | [BOTScan Mainnet](https://scan.botchain.ai) |
-| **Contract Address** | `0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552` | Deployed via `scripts/deploy.js --network mainnet` |
-| **Deployment TX** | `0x0487704d0662a4df0354f2751f3020ea4db2e0f000cd3646aed4d7fa12d342ed` | Recorded on broadcast |
+| **Contract Address** | `0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552` | `0x28d3EE0C8242eE27907bc068B25f54da00A729Ad` |
+| **Deployment TX** | `0x0487704d0662a4df0354f2751f3020ea4db2e0f000cd3646aed4d7fa12d342ed` | `0xd414d578b9e18c0b90e9008d9476400fe5395f9ac0692d986c732f3727ea16bb` |
+| **Verified Interaction TX** | `0xb22b96178fc455b7aa4dc2d9b8f36222c46100ce1f2fa1f65934c490ba0fa166` | `0xaa8673eb226a880847f4d5d428432d4f2a1f6ab1b7077abc74800f8f0b0a224e` |
 | **Compiler & Version** | Solidity `^0.8.20` (Optimizer: 200 runs) | Solidity `^0.8.20` (Optimizer: 200 runs) |
 | **Gas Dynamics** | 20 Gwei baseline (~650,000 gas) | 20 Gwei baseline (~0.013 BOT deployment cost) |
 | **DEX Swap Probing** | B DEX Testnet Pairs | B DEX Mainnet Pairs (`eth_getLogs` verified) |
@@ -210,8 +211,8 @@ OrderFlow adheres strictly to the BOTChain Ecosystem Support Program compliance 
                                     |
                                     v
 +--------------------------------------------------------------------------+
-| PHASE 2: Mainnet Launch & B DEX Liquidity Integration                    |
-| [ ] Deploy OrderFlowRegistry on BOT Chain Mainnet (Chain ID 677)         |
+| PHASE 2: Mainnet Launch & B DEX Liquidity Integration (LIVE)             |
+| [x] Deploy OrderFlowRegistry on BOT Chain Mainnet (0x28d3EE0... 677)     |
 | [ ] One-click direct limit-order execution on B DEX from coaching tips   |
 | [ ] Shareable public report NFT / SBT minting                            |
 +--------------------------------------------------------------------------+

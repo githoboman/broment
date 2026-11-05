@@ -20,7 +20,7 @@ let globalState: {
 } = {
   address: null,
   chainId: null,
-  networkType: (process.env.NEXT_PUBLIC_BOTCHAIN_NETWORK as any) === 'mainnet' ? 'mainnet' : 'testnet',
+  networkType: (process.env.NEXT_PUBLIC_BOTCHAIN_NETWORK as any) === 'testnet' ? 'testnet' : 'mainnet',
   isDemoMode: false,
   isConnecting: false,
   walletType: null,

@@ -76,6 +76,11 @@ Key Milestones Completed:
 - Official DEX: https://dex.botchain.ai/#/swap (B DEX)
 - Official Bridge: https://bridge.botchain.ai/
 - Official Wallet: https://wallet.botchain.ai/ / MetaMask
+- Deployed Smart Contracts:
+  * OrderFlowRegistry: 0x28d3EE0C8242eE27907bc068B25f54da00A729Ad
+    Deployment Tx Hash: 0xd414d578b9e18c0b90e9008d9476400fe5395f9ac0692d986c732f3727ea16bb
+    Notarization Tx Hash: 0xaa8673eb226a880847f4d5d428432d4f2a1f6ab1b7077abc74800f8f0b0a224e
+    BOTScan: https://scan.botchain.ai/address/0x28d3EE0C8242eE27907bc068B25f54da00A729Ad
 
 --------------------------------------------------------------------------------
 3. REPOSITORY FILE STRUCTURE OVERVIEW
@@ -165,6 +170,12 @@ Key Milestones Completed:
     [x] Enhanced WalletModal.tsx to dynamically surface Mainnet Bridge and B DEX links.
     [x] Created production environment template (.env.example) and updated secrets.txt for mainnet.
     [x] Validated production build (`next build`) and typecheck with 0 errors.
+
+[x] Phase 8: BOT Chain Mainnet Live Deployment & On-Chain Verification (November 5, 2026)
+    [x] Deployed OrderFlowRegistry to BOT Chain Mainnet (Chain ID 677) at 0x28d3EE0C8242eE27907bc068B25f54da00A729Ad.
+    [x] Verified deployment transaction 0xd414d578b9e18c0b90e9008d9476400fe5395f9ac0692d986c732f3727ea16bb on BOTScan Mainnet.
+    [x] Executed live on-chain report notarization transaction 0xaa8673eb226a880847f4d5d428432d4f2a1f6ab1b7077abc74800f8f0b0a224e in Block #29,238,228.
+    [x] Updated frontend default network to BOT Chain Mainnet (Chain ID 677) with embedded contract address.
 
 --------------------------------------------------------------------------------
 5. QUICK REFERENCE COMMANDS & LINKS

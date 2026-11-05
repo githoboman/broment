@@ -1,7 +1,15 @@
 {
-  "address": "0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552",
-  "chainId": 968,
+  "address": "0x28d3EE0C8242eE27907bc068B25f54da00A729Ad",
+  "chainId": 677,
   "networks": {
+    "677": {
+      "name": "BOT Chain Mainnet",
+      "networkKey": "mainnet",
+      "address": "0x28d3EE0C8242eE27907bc068B25f54da00A729Ad",
+      "txHash": "0xd414d578b9e18c0b90e9008d9476400fe5395f9ac0692d986c732f3727ea16bb",
+      "deployedAt": "2026-11-05T21:04:17.187Z",
+      "explorerUrl": "https://scan.botchain.ai/address/0x28d3EE0C8242eE27907bc068B25f54da00A729Ad"
+    },
     "968": {
       "name": "BOT Chain (Bohr Testnet)",
       "networkKey": "testnet",
@@ -9,14 +17,6 @@
       "txHash": "0x0487704d0662a4df0354f2751f3020ea4db2e0f000cd3646aed4d7fa12d342ed",
       "deployedAt": "2026-10-15T21:53:08.000Z",
       "explorerUrl": "https://scan.bohr.life/address/0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552"
-    },
-    "677": {
-      "name": "BOT Chain Mainnet",
-      "networkKey": "mainnet",
-      "address": "",
-      "txHash": "",
-      "deployedAt": "",
-      "explorerUrl": "https://scan.botchain.ai"
     }
   },
   "abi": [
@@ -320,6 +320,5 @@
       "stateMutability": "view",
       "type": "function"
     }
-  ],
-  "chainId": 968
+  ]
 }

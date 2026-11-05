@@ -52,24 +52,29 @@ export const BOTCHAIN_NETWORKS: Record<'testnet' | 'mainnet', BotChainNetwork> =
     bridgeUrl: 'https://bridge.botchain.ai/',
     registryAddress:
       process.env.NEXT_PUBLIC_ORDERFLOW_REGISTRY_ADDRESS_MAINNET ||
-      process.env.NEXT_PUBLIC_ORDERFLOW_REGISTRY_ADDRESS ||
-      '',
+      '0x28d3EE0C8242eE27907bc068B25f54da00A729Ad',
   },
 };
 
-// Default active network based on environment
+// Default active network based on environment (defaults to Mainnet 677)
 export const CURRENT_NETWORK: BotChainNetwork =
-  process.env.NEXT_PUBLIC_BOTCHAIN_NETWORK === 'mainnet'
-    ? BOTCHAIN_NETWORKS.mainnet
-    : BOTCHAIN_NETWORKS.testnet;
+  process.env.NEXT_PUBLIC_BOTCHAIN_NETWORK === 'testnet'
+    ? BOTCHAIN_NETWORKS.testnet
+    : BOTCHAIN_NETWORKS.mainnet;
 
 export function getOrderFlowRegistryAddress(
   networkOrChainId: 'testnet' | 'mainnet' | number = CURRENT_NETWORK.chainId
 ): string {
   if (networkOrChainId === 677 || networkOrChainId === 'mainnet') {
-    return BOTCHAIN_NETWORKS.mainnet.registryAddress || '';
+    return (
+      BOTCHAIN_NETWORKS.mainnet.registryAddress ||
+      '0x28d3EE0C8242eE27907bc068B25f54da00A729Ad'
+    );
   }
-  return BOTCHAIN_NETWORKS.testnet.registryAddress || '0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552';
+  return (
+    BOTCHAIN_NETWORKS.testnet.registryAddress ||
+    '0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552'
+  );
 }
 
 // ─── Popular BOT Chain DEX & Ecosystem Pairs ──────────────────────────────────

@@ -43,15 +43,18 @@ Economical on-chain fees allow active traders and AI agents to execute frequent 
 - **Chain ID:** `968` (`0x3c8`)
 - **Currency Symbol:** `BOT` (18 Decimals)
 - **RPC URL:** `https://rpc.bohr.life`
+- **Smart Contract (`OrderFlowRegistry`):** [`0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552`](https://scan.bohr.life/address/0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552)
 - **Block Explorer:** [BOTScan Testnet](https://scan.bohr.life/)
 - **Testnet Faucet:** [BOT Chain Faucet](https://faucet.botchain.ai/basic)
 - **Official Wallet:** [BO Wallet](https://wallet.bohr.life/)
 
-### BOT Chain Mainnet (Production)
+### BOT Chain Mainnet (Production — Live)
 - **Network Name:** BOT Chain Mainnet
 - **Chain ID:** `677` (`0x2a5`)
 - **Currency Symbol:** `BOT` (150M Total Supply)
 - **RPC URL:** `https://rpc.botchain.ai`
+- **Smart Contract (`OrderFlowRegistry`):** [`0x28d3EE0C8242eE27907bc068B25f54da00A729Ad`](https://scan.botchain.ai/address/0x28d3EE0C8242eE27907bc068B25f54da00A729Ad)
+- **Mainnet Deployment TX:** [`0xd414d578b9e18c0b90e9008d9476400fe5395f9ac0692d986c732f3727ea16bb`](https://scan.botchain.ai/tx/0xd414d578b9e18c0b90e9008d9476400fe5395f9ac0692d986c732f3727ea16bb)
 - **Block Explorer:** [BOTScan Mainnet](https://scan.botchain.ai)
 - **Official DEX:** [B DEX](https://dex.botchain.ai/#/swap)
 - **Official Bridge:** [BOT Bridge](https://bridge.botchain.ai/)
