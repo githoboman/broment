@@ -4,8 +4,8 @@
 Project: OrderFlow (AI Behavioral Trading Journal & On-Chain Analytics)
 Target Ecosystem: BOT Chain (EVM Layer 1 for DePIN and AI Applications)
 Reference Docs: https://dev-docs.botchain.ai/docs/intro
-Last Updated: October 15, 2026
-Status: Migration to BOT Chain Completed & Typecheck Validated
+Last Updated: November 5, 2026
+Status: Prepared for BOT Chain Mainnet Deployment (Preflight Audited & Verified)
 
 --------------------------------------------------------------------------------
 1. EXECUTIVE SUMMARY & WHAT WAS ACCOMPLISHED
@@ -156,16 +156,31 @@ Key Milestones Completed:
     [x] Implemented offline typewriter fallback in AnalysisPanel.tsx for instant AI behavioral review without external servers.
     [x] Verified full production Next.js build passes cleanly for Vercel deployment.
 
+[x] Phase 7: BOT Chain Mainnet Deployment Preparation (November 5, 2026)
+    [x] Built multi-network deployment architecture in scripts/deploy.js (--network mainnet / --network testnet).
+    [x] Created non-destructive preflight audit suite (scripts/preflight-mainnet.js) verifying RPC health, Chain ID 677, gas dynamics, and B DEX swap log indexing.
+    [x] Audited BOT Chain Mainnet RPC (https://rpc.botchain.ai) - verified block height > 29.2M and gas price 20 Gwei (~0.013 BOT deployment cost).
+    [x] Configured multi-network contract artifact mapping in src/lib/contracts/OrderFlowRegistry.json and typed helpers in src/lib/contracts/index.ts.
+    [x] Added automated EVM network detection in src/hooks/use-wallet.ts for BOT Chain Mainnet (0x2a5).
+    [x] Enhanced WalletModal.tsx to dynamically surface Mainnet Bridge and B DEX links.
+    [x] Created production environment template (.env.example) and updated secrets.txt for mainnet.
+    [x] Validated production build (`next build`) and typecheck with 0 errors.
+
 --------------------------------------------------------------------------------
 5. QUICK REFERENCE COMMANDS & LINKS
 --------------------------------------------------------------------------------
 - Install dependencies: npm install
 - Start local dev server: npm run dev
 - Typecheck: npm run typecheck
+- Production build: npm run build
+- Mainnet Preflight Audit: npm run preflight:mainnet
+- Deploy to Bohr Testnet: npm run deploy:testnet
+- Deploy to BOT Chain Mainnet: npm run deploy:mainnet
 - Bohr Testnet Faucet: https://faucet.botchain.ai/basic
 - Bohr Testnet Explorer: https://scan.bohr.life/
 - BOT Chain Mainnet Explorer: https://scan.botchain.ai/
-- B DEX Swap: https://dex.botchain.ai/#/swap
+- BOT Chain Bridge: https://bridge.botchain.ai/
+- B DEX Official Swap: https://dex.botchain.ai/#/swap
 
 ================================================================================
                           END OF PROJECT MEMORY

@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Button } from "@/components/ui/button";
 import { Share2, Save, Loader2, AlertCircle } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
-import { Trade } from '@/lib/mock-data';
+import { Trade, MOCK_ANALYSIS } from '@/lib/mock-data';
 
 interface AnalysisPanelProps {
   isOpen: boolean;

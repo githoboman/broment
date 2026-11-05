@@ -10,7 +10,9 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "deploy:testnet": "node scripts/deploy.js",
+    "preflight:mainnet": "node scripts/preflight-mainnet.js",
+    "deploy:testnet": "node scripts/deploy.js --network testnet",
+    "deploy:mainnet": "node scripts/deploy.js --network mainnet",
     "wallet:new": "node scripts/generate-wallet.js"
   },
   "dependencies": {

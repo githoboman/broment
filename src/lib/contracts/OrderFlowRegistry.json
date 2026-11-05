@@ -1,5 +1,24 @@
 {
   "address": "0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552",
+  "chainId": 968,
+  "networks": {
+    "968": {
+      "name": "BOT Chain (Bohr Testnet)",
+      "networkKey": "testnet",
+      "address": "0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552",
+      "txHash": "0x0487704d0662a4df0354f2751f3020ea4db2e0f000cd3646aed4d7fa12d342ed",
+      "deployedAt": "2026-10-15T21:53:08.000Z",
+      "explorerUrl": "https://scan.bohr.life/address/0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552"
+    },
+    "677": {
+      "name": "BOT Chain Mainnet",
+      "networkKey": "mainnet",
+      "address": "",
+      "txHash": "",
+      "deployedAt": "",
+      "explorerUrl": "https://scan.botchain.ai"
+    }
+  },
   "abi": [
     {
       "inputs": [],

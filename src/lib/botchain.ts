@@ -23,6 +23,8 @@ export interface BotChainNetwork {
   faucetUrl?: string;
   symbol: string;
   dexUrl?: string;
+  bridgeUrl?: string;
+  registryAddress?: string;
 }
 
 export const BOTCHAIN_NETWORKS: Record<'testnet' | 'mainnet', BotChainNetwork> = {
@@ -35,6 +37,9 @@ export const BOTCHAIN_NETWORKS: Record<'testnet' | 'mainnet', BotChainNetwork> =
     faucetUrl: 'https://faucet.botchain.ai/basic',
     symbol: 'BOT',
     dexUrl: 'https://dex.botchain.ai/#/swap',
+    registryAddress:
+      process.env.NEXT_PUBLIC_ORDERFLOW_REGISTRY_ADDRESS ||
+      '0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552',
   },
   mainnet: {
     name: 'BOT Chain Mainnet',
@@ -44,6 +49,11 @@ export const BOTCHAIN_NETWORKS: Record<'testnet' | 'mainnet', BotChainNetwork> =
     explorerUrl: process.env.BOTCHAIN_MAINNET_EXPLORER || 'https://scan.botchain.ai',
     symbol: 'BOT',
     dexUrl: 'https://dex.botchain.ai/#/swap',
+    bridgeUrl: 'https://bridge.botchain.ai/',
+    registryAddress:
+      process.env.NEXT_PUBLIC_ORDERFLOW_REGISTRY_ADDRESS_MAINNET ||
+      process.env.NEXT_PUBLIC_ORDERFLOW_REGISTRY_ADDRESS ||
+      '',
   },
 };
 
@@ -52,6 +62,15 @@ export const CURRENT_NETWORK: BotChainNetwork =
   process.env.NEXT_PUBLIC_BOTCHAIN_NETWORK === 'mainnet'
     ? BOTCHAIN_NETWORKS.mainnet
     : BOTCHAIN_NETWORKS.testnet;
+
+export function getOrderFlowRegistryAddress(
+  networkOrChainId: 'testnet' | 'mainnet' | number = CURRENT_NETWORK.chainId
+): string {
+  if (networkOrChainId === 677 || networkOrChainId === 'mainnet') {
+    return BOTCHAIN_NETWORKS.mainnet.registryAddress || '';
+  }
+  return BOTCHAIN_NETWORKS.testnet.registryAddress || '0xeeA153f4C7B6d11A54d2934Bda63FEC8edbCa552';
+}
 
 // ─── Popular BOT Chain DEX & Ecosystem Pairs ──────────────────────────────────
 

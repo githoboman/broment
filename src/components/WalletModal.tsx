@@ -125,20 +125,42 @@ export function WalletModal({ isOpen, onOpenChange }: WalletModalProps) {
           </button>
         </div>
 
-        {/* Faucet Link & Get Wallet */}
+        {/* Network-aware Links & Get Wallet */}
         <div className="flex flex-col gap-2 pt-2 border-t border-white/5 text-center text-xs text-[#8B8B9E]">
-          <div className="flex items-center justify-center gap-1.5 text-amber-300/90 font-medium">
-            <Coins className="w-3.5 h-3.5" />
-            <span>Need test tokens? </span>
-            <a
-              href="https://faucet.botchain.ai/basic"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#00D4FF] underline hover:text-[#00D4FF]/80 ml-1"
-            >
-              Get Free tBOT Faucet
-            </a>
-          </div>
+          {currentNetwork.chainId === 968 ? (
+            <div className="flex items-center justify-center gap-1.5 text-amber-300/90 font-medium">
+              <Coins className="w-3.5 h-3.5" />
+              <span>Need test tokens? </span>
+              <a
+                href="https://faucet.botchain.ai/basic"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#00D4FF] underline hover:text-[#00D4FF]/80 ml-1"
+              >
+                Get Free tBOT Faucet
+              </a>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center gap-2 text-emerald-400/90 font-medium">
+              <a
+                href="https://bridge.botchain.ai/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#00D4FF] underline hover:text-[#00D4FF]/80"
+              >
+                BOT Mainnet Bridge
+              </a>
+              <span className="text-white/40">·</span>
+              <a
+                href="https://dex.botchain.ai/#/swap"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#00D4FF] underline hover:text-[#00D4FF]/80"
+              >
+                B DEX Swap
+              </a>
+            </div>
+          )}
 
           <p className="pt-1">
             Need a wallet?{' '}

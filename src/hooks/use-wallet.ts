@@ -90,8 +90,13 @@ async function connectEVM(preferredProvider?: any): Promise<{ address: string; c
   }
 
   // Read chainId
-  const hexChainId = await ethereum.request({ method: 'eth_chainId' }).catch(() => '0x3c8');
+  const hexChainId = await ethereum.request({ method: 'eth_chainId' }).catch(() => (globalState.networkType === 'mainnet' ? '0x2a5' : '0x3c8'));
   const chainId = parseInt(hexChainId, 16);
+  if (chainId === 677) {
+    globalState.networkType = 'mainnet';
+  } else if (chainId === 968) {
+    globalState.networkType = 'testnet';
+  }
 
   return { address: accounts[0], chainId };
 }
@@ -132,7 +137,13 @@ export function useWallet() {
         notify();
       };
       const handleChainChanged = (hexChain: string) => {
-        globalState.chainId = parseInt(hexChain, 16);
+        const id = parseInt(hexChain, 16);
+        globalState.chainId = id;
+        if (id === 677) {
+          globalState.networkType = 'mainnet';
+        } else if (id === 968) {
+          globalState.networkType = 'testnet';
+        }
         notify();
       };
 
